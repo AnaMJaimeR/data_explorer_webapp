@@ -1,123 +1,108 @@
-# To be filled by students
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
 
-# import matplotlib.pyplot as plt
 import plotly.express as px
 from datetime import datetime
+
+graph_title = "Quantity per Value"
+x_axis_titlefont_size = 16
+x_axis_tickfont_size = 14
+category_order = "total descending"
+y_axis_title = "Quantity"
+y_axis_titlefont_size = 16
+y_axis_tickfont_size = 14
+template = "simple_white"
 
 
 @dataclass
 class DateColumn:
+    """
+    Class for storing and show information about a date columns.
+
+     Parameters
+     ----------
+     col_name : str
+         name of the column.
+
+     serie : pd.Series
+         Pandas Series.
+    """
+
     col_name: str
     serie: pd.Series
 
-    def get_name(self):
-        """
-        Return name of selected column
-        """
+    def get_name(self) -> str:
+        """Return name of selected column"""
         return self.col_name
 
     def get_unique(self):
-        """
-        Return number of unique values for selected column
-        """
+        """Return number of unique values for selected column"""
         return self.serie.nunique()
 
     def get_missing(self):
-        """
-        Return number of missing values for selected column
-        """
+        """Return number of missing values for selected column"""
         return self.serie.isna().sum()
 
     def get_weekend(self):
-        """
-        Return number of occurrence of days falling during weekend (Saturday and Sunday)
-        """
+        """Return number of occurrence of days falling during weekend (Saturday and Sunday)"""
         return self.serie.dt.weekday.isin([5, 6]).sum()
 
     def get_weekday(self):
-        """
-        Return number of weekday days (not Saturday or Sunday)
-        """
+        """Return number of weekday days (not Saturday or Sunday)"""
         return self.serie.dt.weekday.isin([1, 2, 3, 4, 5]).sum()
 
     def get_future(self):
-        """
-        Return number of cases with future dates (after today)
-        """
+        """Return number of cases with future dates (after today)"""
         return (self.serie > datetime.today()).sum()
 
     def get_empty_1900(self):
-        """
-        Return number of occurrence of 1900-01-01 value
-        """
+        """Return number of occurrence of 1900-01-01 value"""
         return (self.serie.dt.date == pd.Timestamp(1900, 1, 1)).sum()
 
     def get_empty_1970(self):
-        """
-        Return number of occurrence of 1970-01-01 value
-        """
+        """Return number of occurrence of 1970-01-01 value"""
         return (self.serie.dt.date == pd.Timestamp(1970, 1, 1)).sum()
 
     def get_min(self):
-        """
-        Return the minimum date
-        """
+        """Return the minimum date"""
         return str(self.serie.min())
 
     def get_max(self):
-        """
-        Return the maximum date
-        """
+        """Return the maximum date"""
         return str(self.serie.max())
 
     def get_barchart(self):
-        """
-        Return the generated bar chart for selected column
-        """
-        # matplotlib
-        # return self.serie.value_counts().plot.bar(x='values', y='quantity', rot=0)
-        # plotly
+        """Return the generated bar chart for selected column"""
         fig = px.bar(
             self.serie.value_counts().reset_index(), x="index", y=self.col_name
         )
         fig.update_layout(
-            title="Quantity per Value",
+            title=graph_title,
             xaxis=dict(
                 title=self.col_name,
-                titlefont_size=16,
-                tickfont_size=14,
-                categoryorder="total descending",
+                titlefont_size=x_axis_titlefont_size,
+                tickfont_size=x_axis_tickfont_size,
+                categoryorder=category_order,
             ),
             yaxis=dict(
-                title="Quantity",
-                titlefont_size=16,
-                tickfont_size=14,
+                title=y_axis_title,
+                titlefont_size=y_axis_titlefont_size,
+                tickfont_size=y_axis_tickfont_size,
             ),
-            template="simple_white",
+            template=template,
         )
         return fig.show()
 
     def get_frequent(self):
-        """
-        Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values
-        """
-        counts = self.serie.value_counts()
-        percent = self.serie.value_counts(
-            normalize=True
-        )  # TODO: choose if we drop na or not. True by default, dropna=False
-        percent100 = (
-            self.serie.value_counts(normalize=True).mul(100).round(1).astype(str) + "%"
+        """Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values"""
+        counts = self.serie.value_counts().rename("ocurrences")
+        percent = self.serie.value_counts(normalize=True).rename(
+            "percentage"
+        )  # dropna=True by default
+        return (
+            pd.concat([counts, percent], axis=1)
+            .reset_index()
+            .rename(columns={"index": "value"})
+            .head(20)
         )
-        df = pd.DataFrame(
-            {"counts": counts, "per": percent, "per100": percent100}
-        ).reset_index()
-        df.columns = [
-            "value",
-            "occurrence",
-            "percentage",
-            "percentage100",
-        ]  # if we dont want to rename columns, we can delete this step
-        return df.head(20)

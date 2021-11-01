@@ -40,7 +40,7 @@ class Dataset:
 
     def get_cols_dtype(self) -> Dict[str, str]:
         """Return dictionary with column name as keys and data type as values."""
-        return self.df.dtypes.to_dict()
+        return self.df.dtypes.astype(str).to_dict()
 
     def get_n_duplicates(self) -> int:
         """Return number of duplicated rows of loaded dataset."""

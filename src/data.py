@@ -10,7 +10,7 @@ class Dataset:
     """
     Class for storing and show display information about a DataFrame.
 
-    Parameters
+    Attributes
     ----------
     name : str
         Name of the DataFrame.

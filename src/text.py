@@ -4,6 +4,7 @@ import pandas as pd
 
 import plotly.express as px
 
+#parameters for the graph
 graph_title = "Quantity per Value"
 x_axis_titlefont_size = 16
 x_axis_tickfont_size = 14
@@ -13,11 +14,10 @@ y_axis_titlefont_size = 16
 y_axis_tickfont_size = 14
 template = "simple_white"
 
-
 @dataclass
 class TextColumn:
     """
-    Class for storing and show information about a text columns.
+    Class for storing and showing information about a text column.
 
     Parameters
     ----------
@@ -25,7 +25,7 @@ class TextColumn:
         name of the column.
 
     serie : pd.Series
-        Pandas Series.
+        Series containing the data of a text column.
     """
 
     col_name: str
@@ -35,43 +35,43 @@ class TextColumn:
         """Return name of selected column"""
         return self.col_name
 
-    def get_unique(self):
+    def get_unique(self) ->int:
         """Return number of unique values for selected column"""
         return self.serie.nunique()
 
-    def get_missing(self):
+    def get_missing(self) -> int:
         """Return number of missing values for selected column"""
         return self.serie.isna().sum()
 
-    def get_empty(self):
+    def get_empty(self) -> int:
         """Return number of rows with empty string for selected column"""
         return self.serie.str.fullmatch(
             ""
-        ).sum()  # TODO: CHECK https://canvas.uts.edu.au/courses/19317/discussion_topics/195846
+        ).sum()  # TODO: Check https://canvas.uts.edu.au/courses/19317/discussion_topics/195846
 
-    def get_whitespace(self):
+    def get_whitespace(self) -> int:
         """Return number of rows with only whitespaces for selected column"""
         return self.serie.str.isspace().sum()
 
-    def get_lowercase(self):
+    def get_lowercase(self) -> int:
         """Return number of rows with only lower case characters for selected column"""
         return self.serie.str.islower().sum()
 
-    def get_uppercase(self):
+    def get_uppercase(self) -> int:
         """Return number of rows with only upper case characters for selected column"""
         return self.serie.str.isupper().sum()
 
-    def get_alphabet(self):
+    def get_alphabet(self) -> int:
         """Return number of rows with only alphabet characters for selected column"""
         return self.serie.str.isalpha().sum()
 
-    def get_digit(self):
+    def get_digit(self) -> int:
         """Return number of rows with only numbers as characters for selected column"""
         return self.serie.str.isdigit().sum()
 
-    def get_mode(self):
+    def get_mode(self,dropna: bool = True) -> str:
         """Return the mode value for selected column"""
-        return self.serie.mode(dropna=True)  # TODO: drop or not
+        return self.serie.mode(dropna=dropna)[0]
 
     def get_barchart(self):
         """Return the generated bar chart for selected column"""
@@ -95,15 +95,15 @@ class TextColumn:
         )
         return fig.show()
 
-    def get_frequent(self):
+    def get_frequent(self,n_head: int = 20,dropna: bool = True) -> pd.DataFrame:
         """Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values"""
         counts = self.serie.value_counts().rename("ocurrences")
-        percent = self.serie.value_counts(normalize=True).rename(
+        percent = self.serie.value_counts(normalize=True, dropna = dropna).round(decimals = 4).rename(
             "percentage"
-        )  # dropna=True by default
+        )
         return (
             pd.concat([counts, percent], axis=1)
             .reset_index()
             .rename(columns={"index": "value"})
-            .head(20)
+            .head(n_head)
         )

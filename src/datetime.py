@@ -1,3 +1,4 @@
+from pandas.core.frame import DataFrame
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
@@ -5,6 +6,7 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
+#parameters for the graph
 graph_title = "Quantity per Value"
 x_axis_titlefont_size = 16
 x_axis_tickfont_size = 14
@@ -14,11 +16,10 @@ y_axis_titlefont_size = 16
 y_axis_tickfont_size = 14
 template = "simple_white"
 
-
 @dataclass
 class DateColumn:
     """
-    Class for storing and show information about a date columns.
+    Class for storing and showing information about a date column.
 
      Parameters
      ----------
@@ -26,7 +27,7 @@ class DateColumn:
          name of the column.
 
      serie : pd.Series
-         Pandas Series.
+         Series containing the data of a date column.
     """
 
     col_name: str
@@ -36,39 +37,39 @@ class DateColumn:
         """Return name of selected column"""
         return self.col_name
 
-    def get_unique(self):
+    def get_unique(self) -> int:
         """Return number of unique values for selected column"""
         return self.serie.nunique()
 
-    def get_missing(self):
+    def get_missing(self) -> int:
         """Return number of missing values for selected column"""
         return self.serie.isna().sum()
 
-    def get_weekend(self):
+    def get_weekend(self) -> int:
         """Return number of occurrence of days falling during weekend (Saturday and Sunday)"""
         return self.serie.dt.weekday.isin([5, 6]).sum()
 
-    def get_weekday(self):
+    def get_weekday(self) -> int:
         """Return number of weekday days (not Saturday or Sunday)"""
         return self.serie.dt.weekday.isin([1, 2, 3, 4, 5]).sum()
 
-    def get_future(self):
+    def get_future(self) -> int:
         """Return number of cases with future dates (after today)"""
         return (self.serie > datetime.today()).sum()
 
-    def get_empty_1900(self):
+    def get_empty_1900(self) -> int:
         """Return number of occurrence of 1900-01-01 value"""
         return (self.serie.dt.date == pd.Timestamp(1900, 1, 1)).sum()
 
-    def get_empty_1970(self):
+    def get_empty_1970(self) -> int:
         """Return number of occurrence of 1970-01-01 value"""
         return (self.serie.dt.date == pd.Timestamp(1970, 1, 1)).sum()
 
-    def get_min(self):
+    def get_min(self) -> datetime:
         """Return the minimum date"""
         return str(self.serie.min())
 
-    def get_max(self):
+    def get_max(self) -> datetime:
         """Return the maximum date"""
         return str(self.serie.max())
 
@@ -94,15 +95,15 @@ class DateColumn:
         )
         return fig.show()
 
-    def get_frequent(self):
+    def get_frequent(self,n_head: int = 20,dropna: bool = True) -> pd.DataFrame:
         """Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values"""
         counts = self.serie.value_counts().rename("ocurrences")
-        percent = self.serie.value_counts(normalize=True).rename(
+        percent = self.serie.value_counts(normalize = True, dropna = dropna).round(decimals = 4).rename(
             "percentage"
-        )  # dropna=True by default
+        )
         return (
             pd.concat([counts, percent], axis=1)
             .reset_index()
             .rename(columns={"index": "value"})
-            .head(20)
+            .head(n_head)
         )

@@ -8,7 +8,7 @@ import pandas as pd
 @dataclass
 class Dataset:
     """
-    Class for storing and show display information about a DataFrame.
+    Class for storing and displaying information about a DataFrame.
 
     Attributes
     ----------

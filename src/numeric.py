@@ -5,6 +5,8 @@ import pandas as pd
 import plotly.express as px
 from plotly.graph_objs._figure import Figure
 
+from src.settings import FormatHistogram
+
 
 @dataclass
 class NumericColumn:
@@ -77,25 +79,25 @@ class NumericColumn:
 
     def get_histogram(
         self,
-        params: dict,
+        params: FormatHistogram,
     ) -> Figure:
         """Return the generated histogram for selected column"""
         fig = px.histogram(
-            self._get_occurrences(), x="occurrence", nbins=params.get("MAX_BINS")
+            self._get_occurrences(), x="occurrence", nbins=params.MAX_BINS
         )
         fig.update_layout(
-            title=params.get("TITLE"),
+            title=params.TITLE,
             xaxis=dict(
                 title=f"{self.col_name} (binned)",
-                titlefont_size=params.get("AXIS_FONT_SIZE"),
-                tickfont_size=params.get("TICK_FONT_SIZE"),
+                titlefont_size=params.AXIS_FONT_SIZE,
+                tickfont_size=params.TICK_FONT_SIZE,
             ),
             yaxis=dict(
-                title=params.get("Y_AXIS_LABEL"),
-                titlefont_size=params.get("AXIS_FONT_SIZE"),
-                tickfont_size=params.get("TICK_FONT_SIZE"),
+                title=params.Y_AXIS_LABEL,
+                titlefont_size=params.AXIS_FONT_SIZE,
+                tickfont_size=params.TICK_FONT_SIZE,
             ),
-            template=params.get("TEMPLATE"),
+            template=params.TEMPLATE,
         )
         return fig
 

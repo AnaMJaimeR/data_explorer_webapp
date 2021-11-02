@@ -1,7 +1,8 @@
 import pandas as pd
 import streamlit as st
 from data_explorer.domain.entities import Section
-from data_explorer.domain.sections.data import Dataset
+from src.data import Dataset
+from src.settings import ParamsSections
 from src.text import TextColumn
 
 
@@ -9,9 +10,12 @@ class TextSection(Section):
     """
     Class that stores the content of the text section.
 
-    Attributes (TODO!!)
+    Attributes
     ----------
-
+    dataset : DataSet
+        Dataset object with the transformed dataframe.
+    params: ParamsSections
+        Object with the parameters for the datetime section.
     header : str, default = "3. Information on text columns"
         Section header.
     """
@@ -19,14 +23,13 @@ class TextSection(Section):
     def __init__(
         self,
         dataset: Dataset,
-        params: dict,
+        params: ParamsSections,
         header: str = "3. Information on text columns",
     ):
+        self._name = "Text"
         self._header = header
-        self._processed_df = dataset
-        self._n_head = params.get("TOP_FREQUENCY")
-        self._dropna = params.get("DROP_NA")
-        self._plot_params = params.get("PLOT")
+        self._params = params
+        self._dataset = dataset
 
     def render(self) -> None:
         """Render the text section."""
@@ -34,34 +37,33 @@ class TextSection(Section):
         # Header
         st.header(self._header)
 
-        for col in self._processed_df.get_text_columns():
-            textcol = TextColumn(col, self._processed_df.df[col])
+        for n, col in enumerate(self._dataset.get_text_columns()):
+            text_col = TextColumn(col, self._dataset.df[col])
 
-            # Display name of column as subtitle
-            st.markdown(
-                f"**3.3 Field Name:** {textcol.get_name()}"
-            )  # TODO: check subtitle
+            # Subheader
+            st.subheader(f"3.{n} Field Name: {text_col.get_name()}")
 
-            # Display information about the text column
-            text_column_values = {
-                "Number of unique values": textcol.get_unique(),
-                "Number of rows with missing values": textcol.get_missing(),
-                "Number of empty rows": textcol.get_empty(),
-                "Number of rows with only whitespaces": textcol.get_whitespace(),
-                "Number of rows with only lowercases": textcol.get_lowercase(),
-                "Number of rows with only uppercases": textcol.get_uppercase(),
-                "Number of rows with only alphabet": textcol.get_alphabet(),
-                "Number of rows with only digitss": textcol.get_digit(),
-                "Mode Value": textcol.get_mode(dropna=self._dropna),
-            }
+            # Display table with metrics
             st.dataframe(
-                pd.Series(text_column_values, name="value")
-            )  # TODO: check if possible to pass a serie
-            # st.dataframe(pd.DataFrame(pd.Series(text_column_values, name="value")))
+                pd.Series(
+                    {
+                        "Number of Unique Values": text_col.get_unique(),
+                        "Number of Rows with Missing Values": text_col.get_missing(),
+                        "Number of Empty Rows": text_col.get_empty(),
+                        "Number of Rows with Only Whitespace": text_col.get_whitespace(),
+                        "Number of Rows with Only Lowercases": text_col.get_lowercase(),
+                        "Number of Rows with Only Uppercases": text_col.get_uppercase(),
+                        "Number of Rows with Only Alphabet": text_col.get_alphabet(),
+                        "Number of Rows with only Digitss": text_col.get_digit(),
+                        "Mode Value": text_col.get_mode(dropna=self._params.DROP_NA),
+                    },
+                    name="value",
+                )
+            )
 
-            # Display a bar chart showing the number of occurrence for each value
-            st.plotly_chart(textcol.get_barchart(self, params=self._plot_params))
+            # Display the Bar chart
+            st.plotly_chart(text_col.get_barchart(self._params.PLOT))
 
-            # Display a table listing the frequencies and percentage for each value
-            st.write("**Most Frequent values**")
-            st.dataframe(textcol.get_frequent(n_head=self._n_head))
+            # Display most frequent values
+            st.write("**Most Frequent Values**")
+            st.dataframe(text_col.get_frequent(self._params.TOP_FREQUENCY))

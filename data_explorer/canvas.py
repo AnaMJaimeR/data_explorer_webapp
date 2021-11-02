@@ -50,8 +50,8 @@ class Canvas:
         # )
         # text_section.render()
 
-        # date_section = DateSection(
+        # datetime_section = DatetimeSection(
         #     dataset=dataset,
         #     params=self._parameters.DATE_COLS,
         # )
-        # date_section.render()
+        # datetime_section.render()

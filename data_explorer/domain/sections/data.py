@@ -98,6 +98,6 @@ class OverallSection(Section):
         self._processed_df = self._raw_df.convert_to_datetime(selection)
 
     @property
-    def processed_df(self) -> pd.DataFrame:
-        """Return the dataframe with the selected columns as datetime type."""
-        return self._processed_df
+    def processed_dataset(self) -> Dataset:
+        """Return the Dataset with the selected columns as datetime type."""
+        return Dataset(self._raw_df.get_name(), self._processed_df)

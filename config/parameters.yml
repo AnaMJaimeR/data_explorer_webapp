@@ -1,26 +1,33 @@
 APP_NAME: "Data Explorer Tool"
-FORMAT_PLOTS:
+
+FORMAT_PLOTS: &format_plots
   AXIS_FONT_SIZE: 16
   TICK_FONT_SIZE: 14
   TEMPLATE: "simple_white"
+
 TEXT_COLS:
   TOP_FREQUENCY: 20
   DROP_NA: True
   PLOT:
+    <<: *format_plots
     TITLE: "Bar Chart"
     CATEGORY_ORDER: "total descending"
     Y_AXIS_LABEL: "Count of Records"
+
 DATE_COLS:
   TOP_FREQUENCY: 20
   DROP_NA: True
   PLOT:
+    <<: *format_plots
     TITLE: "Bar Chart"
     CATEGORY_ORDER: "total descending"
     Y_AXIS_LABEL: "Count of Records"
+
 NUMERIC_COLS:
   TOP_FREQUENCY: 20
   DROP_NA: True
   PLOT:
+    <<: *format_plots
     TITLE: "Histogram"
     Y_AXIS_LABEL: "Count of Records"
     MAX_BINS: 50

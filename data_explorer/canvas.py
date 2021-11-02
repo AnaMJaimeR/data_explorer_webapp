@@ -40,18 +40,18 @@ class Canvas:
 
         # numeric_section = NumericSection(
         #     dataset=dataset,
-        #     params={**self._parameters.get("FORMAT_PLOTS"), **self._parameters.get("NUMERIC_COLS")},
+        #     params=self._parameters.NUMERIC_COLS,
         # )
         # numeric_section.render()
 
         # text_section = TextSection(
         #     dataset=dataset,
-        #     params={**self._parameters.get("FORMAT_PLOTS"), **self._parameters.get("TEXT_COLS")},
+        #     params=self._parameters.TEXT_COLS,
         # )
         # text_section.render()
 
         # date_section = DateSection(
         #     dataset=dataset,
-        #     params={**self._parameters.get("FORMAT_PLOTS"), **self._parameters.get("DATE_COLS")},
+        #     params=self._parameters.DATE_COLS,
         # )
         # date_section.render()

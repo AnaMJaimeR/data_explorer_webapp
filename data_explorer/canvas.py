@@ -2,6 +2,7 @@ import streamlit as st
 from src.settings import AppConfig
 
 from data_explorer.domain.sections.data import OverallSection
+from data_explorer.domain.sections.numeric import NumericSection
 from data_explorer.domain.sections.upload import UploadSection
 
 
@@ -38,11 +39,11 @@ class Canvas:
         overall_section.render()
         dataset = overall_section.processed_dataset
 
-        # numeric_section = NumericSection(
-        #     dataset=dataset,
-        #     params=self._parameters.NUMERIC_COLS,
-        # )
-        # numeric_section.render()
+        numeric_section = NumericSection(
+            dataset=dataset,
+            params=self._parameters.NUMERIC_COLS,
+        )
+        numeric_section.render()
 
         # text_section = TextSection(
         #     dataset=dataset,

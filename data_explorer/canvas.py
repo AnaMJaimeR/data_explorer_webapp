@@ -36,21 +36,22 @@ class Canvas:
 
         overall_section = OverallSection(upload_section.loaded_file)
         overall_section.render()
+        dataset = overall_section.processed_dataset
 
         # numeric_section = NumericSection(
-        #     df=overall_section.numeric_columns,
+        #     dataset=dataset,
         #     params={**self._parameters.FORMAT_PLOTS, **self._parameters.NUMERIC_COLS},
         # )
         # numeric_section.render()
 
         # text_section = TextSection(
-        #     df=overall_section.text_columns,
+        #     dataset=dataset,
         #     params={**self._parameters.FORMAT_PLOTS, **self._parameters.TEXT_COLS},
         # )
         # text_section.render()
 
         # date_section = DateSection(
-        #     df=overall_section.date_columns,
+        #     dataset=dataset,
         #     params={**self._parameters.FORMAT_PLOTS, **self._parameters.DATE_COLS},
         # )
         # date_section.render()

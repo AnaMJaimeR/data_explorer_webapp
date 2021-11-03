@@ -60,6 +60,9 @@ class Dataset:
 
     def get_sample(self, n=5):
         """Return Pandas Dataframe with random sampled rows of loaded dataset."""
+        if self.get_n_rows() < n:
+            return self.df.sample(self.get_n_rows())
+
         return self.df.sample(n)
 
     def get_numeric_columns(self) -> List[str]:

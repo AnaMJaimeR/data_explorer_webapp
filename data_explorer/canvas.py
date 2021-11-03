@@ -2,7 +2,9 @@ import streamlit as st
 from src.settings import AppConfig
 
 from data_explorer.domain.sections.data import OverallSection
+from data_explorer.domain.sections.datetime import DatetimeSection
 from data_explorer.domain.sections.numeric import NumericSection
+from data_explorer.domain.sections.text import TextSection
 from data_explorer.domain.sections.upload import UploadSection
 
 
@@ -45,14 +47,14 @@ class Canvas:
         )
         numeric_section.render()
 
-        # text_section = TextSection(
-        #     dataset=dataset,
-        #     params=self._parameters.TEXT_COLS,
-        # )
-        # text_section.render()
+        text_section = TextSection(
+            dataset=dataset,
+            params=self._parameters.TEXT_COLS,
+        )
+        text_section.render()
 
-        # date_section = DateSection(
-        #     dataset=dataset,
-        #     params=self._parameters.DATE_COLS,
-        # )
-        # date_section.render()
+        datetime_section = DatetimeSection(
+            dataset=dataset,
+            params=self._parameters.DATE_COLS,
+        )
+        datetime_section.render()

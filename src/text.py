@@ -81,7 +81,7 @@ class TextColumn:
         params: FormatBarPlot,
     ) -> Figure:
         """Return the generated bar chart for selected column."""
-        fig = px.bar(self._get_occurrences(), x="index", y=self.col_name)
+        fig = px.bar(self._get_occurrences())
         fig.update_layout(
             title=params.TITLE,
             xaxis=dict(
@@ -94,6 +94,7 @@ class TextColumn:
                 titlefont_size=params.AXIS_FONT_SIZE,
                 tickfont_size=params.TICK_FONT_SIZE,
             ),
+            showlegend=False,
             template=params.TEMPLATE,
         )
         return fig

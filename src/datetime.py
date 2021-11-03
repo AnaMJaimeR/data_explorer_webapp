@@ -47,15 +47,15 @@ class DateColumn:
 
     def get_future(self) -> int:
         """Return number of cases with future dates (after today)."""
-        return int(self.serie > datetime.today().sum())
+        return int((self.serie > datetime.today()).sum())
 
     def get_empty_1900(self) -> int:
         """Return number of occurrence of 1900-01-01 value."""
-        return int(self.serie.dt.date == pd.Timestamp(1900, 1, 1).sum())
+        return int((self.serie.dt.date == pd.Timestamp(1900, 1, 1)).sum())
 
     def get_empty_1970(self) -> int:
         """Return number of occurrence of 1970-01-01 value."""
-        return int(self.serie.dt.date == pd.Timestamp(1970, 1, 1).sum())
+        return int((self.serie.dt.date == pd.Timestamp(1970, 1, 1)).sum())
 
     def get_min(self) -> datetime:
         """Return the minimum date."""
@@ -82,7 +82,7 @@ class DateColumn:
         params: FormatBarPlot,
     ) -> Figure:
         """Return the generated bar chart for selected column."""
-        fig = px.bar(self._get_occurrences(), x="index", y=self.col_name)
+        fig = px.bar(self._get_occurrences())
         fig.update_layout(
             title=params.TITLE,
             xaxis=dict(
@@ -95,6 +95,7 @@ class DateColumn:
                 titlefont_size=params.AXIS_FONT_SIZE,
                 tickfont_size=params.TICK_FONT_SIZE,
             ),
+            showlegend=False,
             template=params.TEMPLATE,
         )
         return fig

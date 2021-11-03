@@ -79,7 +79,7 @@ class Dataset:
         return pd.concat(
             [
                 self.df.drop(columns, axis=1),
-                self.df[columns].apply(pd.to_datetime, errors="ignore"),
+                self.df[columns].apply(pd.to_datetime, errors="coerce"),
             ],
             axis=1,
         ).reindex(columns=self.df.columns)

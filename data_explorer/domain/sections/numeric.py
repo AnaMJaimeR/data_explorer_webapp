@@ -44,7 +44,7 @@ class NumericSection(Section):
             num_col = NumericColumn(col, self._dataset.df[col])
 
             # Subheader
-            st.subheader(f"2.{n} Field Name: {num_col.get_name()}")
+            st.subheader(f"2.{n} Field Name: *{num_col.get_name()}*")
 
             # Display table with metrics
             st.dataframe(
@@ -70,3 +70,6 @@ class NumericSection(Section):
             # Display most frequent values
             st.write("**Most Frequent Values**")
             st.dataframe(num_col.get_frequent(self._params.TOP_FREQUENCY))
+
+            # Add a horizontal rule
+            st.markdown("---")

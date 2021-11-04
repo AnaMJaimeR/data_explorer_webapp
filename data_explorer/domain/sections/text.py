@@ -41,7 +41,7 @@ class TextSection(Section):
             text_col = TextColumn(col, self._dataset.df[col])
 
             # Subheader
-            st.subheader(f"3.{n} Field Name: {text_col.get_name()}")
+            st.subheader(f"3.{n} Field Name: *{text_col.get_name()}*")
 
             # Display table with metrics
             st.dataframe(
@@ -67,3 +67,6 @@ class TextSection(Section):
             # Display most frequent values
             st.write("**Most Frequent Values**")
             st.dataframe(text_col.get_frequent(self._params.TOP_FREQUENCY))
+
+            # Add a horizontal rule
+            st.markdown("---")

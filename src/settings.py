@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Union
 
 from driconfig import DriConfig
 from pydantic import BaseModel

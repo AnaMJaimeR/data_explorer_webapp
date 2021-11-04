@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 
 import pandas as pd
 import plotly.express as px
@@ -51,11 +51,11 @@ class DateColumn:
 
     def get_empty_1900(self) -> int:
         """Return number of occurrence of 1900-01-01 value."""
-        return int((self.serie.dt.date == pd.Timestamp(1900, 1, 1)).sum())
+        return int((self.serie.dt.date == date(1900, 1, 1)).sum())
 
     def get_empty_1970(self) -> int:
         """Return number of occurrence of 1970-01-01 value."""
-        return int((self.serie.dt.date == pd.Timestamp(1970, 1, 1)).sum())
+        return int((self.serie.dt.date == date(1970, 1, 1)).sum())
 
     def get_min(self) -> datetime:
         """Return the minimum date."""
@@ -89,6 +89,7 @@ class DateColumn:
                 title=self.col_name,
                 titlefont_size=params.AXIS_FONT_SIZE,
                 tickfont_size=params.TICK_FONT_SIZE,
+                type="category",
             ),
             yaxis=dict(
                 title=params.Y_AXIS_LABEL,

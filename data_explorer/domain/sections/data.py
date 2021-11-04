@@ -66,7 +66,7 @@ class OverallSection(Section):
 
         # List of columns
         st.write("**List of Columns:**")
-        st.write(", ".join(self._raw_df.get_cols_list()))
+        st.code(", ".join(self._raw_df.get_cols_list()))
 
         # Type of columns
         st.write("**Type of Columns:**")

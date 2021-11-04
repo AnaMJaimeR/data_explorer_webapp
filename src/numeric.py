@@ -83,7 +83,7 @@ class NumericColumn:
     ) -> Figure:
         """Return the generated histogram for selected column"""
         fig = px.histogram(
-            self._get_occurrences(), x="occurrence", nbins=params.MAX_BINS
+            pd.DataFrame(self.serie), x=self.col_name, nbins=params.MAX_BINS
         )
         fig.update_layout(
             title=params.TITLE,

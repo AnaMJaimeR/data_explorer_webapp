@@ -47,7 +47,9 @@ class DatetimeSection(Section):
             st.dataframe(
                 pd.Series(
                     {
-                        "Number of Unique Values": date_col.get_unique(),
+                        "Number of Unique Values": date_col.get_unique(
+                            self._params.DROP_NA
+                        ),
                         "Number of Rows with Missing Values": date_col.get_missing(),
                         "Number of Weekend Dates": date_col.get_weekend(),
                         "Number of Weekday Dates": date_col.get_weekday(),
@@ -62,11 +64,15 @@ class DatetimeSection(Section):
             )
 
             # Display the Bar chart
-            st.plotly_chart(date_col.get_barchart(self._params.PLOT))
+            st.plotly_chart(
+                date_col.get_barchart(self._params.PLOT, self._params.DROP_NA)
+            )
 
             # Display most frequent values
             st.write("**Most Frequent Values**")
-            st.dataframe(date_col.get_frequent(self._params.TOP_FREQUENCY))
+            st.dataframe(
+                date_col.get_frequent(self._params.TOP_FREQUENCY, self._params.DROP_NA)
+            )
 
             # Add a horizontal rule
             st.markdown("---")

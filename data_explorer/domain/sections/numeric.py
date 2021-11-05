@@ -50,7 +50,9 @@ class NumericSection(Section):
             st.dataframe(
                 pd.Series(
                     {
-                        "Number of Unique Values": num_col.get_unique(),
+                        "Number of Unique Values": num_col.get_unique(
+                            self._params.DROP_NA
+                        ),
                         "Number of Rows with Missing Values": num_col.get_missing(),
                         "Number of Rows with 0": num_col.get_zeros(),
                         "Number of Rows with Negative Values": num_col.get_negatives(),
@@ -69,7 +71,9 @@ class NumericSection(Section):
 
             # Display most frequent values
             st.write("**Most Frequent Values**")
-            st.dataframe(num_col.get_frequent(self._params.TOP_FREQUENCY))
+            st.dataframe(
+                num_col.get_frequent(self._params.TOP_FREQUENCY, self._params.DROP_NA)
+            )
 
             # Add a horizontal rule
             st.markdown("---")

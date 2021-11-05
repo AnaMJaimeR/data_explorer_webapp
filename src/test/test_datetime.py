@@ -1,6 +1,6 @@
 import unittest
 from abc import ABC, abstractmethod
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -48,7 +48,7 @@ class TestMethodsDate(ABC):
         expected = self.expected_get_unique
 
         # Act
-        result = self.date_class.get_unique()
+        result = self.date_class.get_unique(self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, int)
@@ -175,7 +175,7 @@ class TestMethodsDate(ABC):
         """Test that the output class is Figure type."""
 
         # Act
-        result = self.date_class.get_barchart(params=self.params.PLOT)
+        result = self.date_class.get_barchart(self.params.PLOT, self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, Figure)
@@ -188,7 +188,9 @@ class TestMethodsDate(ABC):
         expected_length = self.expected_length
 
         # Act
-        result = self.date_class.get_frequent(n_head=self.params.TOP_FREQUENCY)
+        result = self.date_class.get_frequent(
+            self.params.TOP_FREQUENCY, self.params.DROP_NA
+        )
 
         # Assert: type of output
         self.assertIsInstance(result, pd.DataFrame)
@@ -216,7 +218,7 @@ class TestMethodsValidDateColumn(TestMethodsDate, unittest.TestCase):
                     "",
                     "2021-10-03",
                     "s",
-                    datetime.today() + timedelta(1),
+                    "2121-10-03",
                     "1900-01-01",
                     "1970-01-01",
                     " ",
@@ -247,13 +249,13 @@ class TestMethodsValidDateColumn(TestMethodsDate, unittest.TestCase):
         self.expected_name = "this_is_the_serie_name"
         self.expected_get_unique = 4
         self.expected_get_missing = 4
-        self.expected_get_weekend = 3
-        self.expected_get_weekday = 2
+        self.expected_get_weekend = 2
+        self.expected_get_weekday = 3
         self.expected_get_future = 1
         self.expected_get_empty_1900 = 1
         self.expected_get_empty_1970 = 1
-        self.expected_get_min = date(1900, 1, 1)
-        self.expected_get_max = date.today() + timedelta(1)
+        self.expected_get_min = datetime(1900, 1, 1)
+        self.expected_get_max = datetime(2121, 10, 3)
         self.expected_length = 4
 
     def tearDown(self) -> None:

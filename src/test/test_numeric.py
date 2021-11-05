@@ -48,7 +48,7 @@ class TestMethodsNumeric(ABC):
         expected = self.expected_get_unique
 
         # Act
-        result = self.numeric_class.get_unique()
+        result = self.numeric_class.get_unique(self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, int)
@@ -194,7 +194,9 @@ class TestMethodsNumeric(ABC):
         expected_length = self.expected_length
 
         # Act
-        result = self.numeric_class.get_frequent(n_head=self.params.TOP_FREQUENCY)
+        result = self.numeric_class.get_frequent(
+            self.params.TOP_FREQUENCY, self.params.DROP_NA
+        )
 
         # Assert: type of output
         self.assertIsInstance(result, pd.DataFrame)

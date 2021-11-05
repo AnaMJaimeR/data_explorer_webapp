@@ -47,7 +47,7 @@ class TestMethodsText(ABC):
         expected = self.expected_get_unique
 
         # Act
-        result = self.text_class.get_unique()
+        result = self.text_class.get_unique(self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, int)
@@ -159,7 +159,7 @@ class TestMethodsText(ABC):
         expected = self.expected_get_mode
 
         # Act
-        result = self.text_class.get_mode()
+        result = self.text_class.get_mode(self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, str)
@@ -170,7 +170,7 @@ class TestMethodsText(ABC):
         """Test that the output class is Figure type."""
 
         # Act
-        result = self.text_class.get_barchart(params=self.params.PLOT)
+        result = self.text_class.get_barchart(self.params.PLOT, self.params.DROP_NA)
 
         # Assert: type of output
         self.assertIsInstance(result, Figure)
@@ -183,7 +183,9 @@ class TestMethodsText(ABC):
         expected_length = self.expected_length
 
         # Act
-        result = self.text_class.get_frequent(n_head=self.params.TOP_FREQUENCY)
+        result = self.text_class.get_frequent(
+            self.params.TOP_FREQUENCY, self.params.DROP_NA
+        )
 
         # Assert: type of output
         self.assertIsInstance(result, pd.DataFrame)

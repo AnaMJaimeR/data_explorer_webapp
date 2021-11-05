@@ -47,7 +47,9 @@ class TextSection(Section):
             st.dataframe(
                 pd.Series(
                     {
-                        "Number of Unique Values": text_col.get_unique(),
+                        "Number of Unique Values": text_col.get_unique(
+                            self._params.DROP_NA
+                        ),
                         "Number of Rows with Missing Values": text_col.get_missing(),
                         "Number of Empty Rows": text_col.get_empty(),
                         "Number of Rows with Only Whitespace": text_col.get_whitespace(),
@@ -55,18 +57,22 @@ class TextSection(Section):
                         "Number of Rows with Only Uppercases": text_col.get_uppercase(),
                         "Number of Rows with Only Alphabet": text_col.get_alphabet(),
                         "Number of Rows with only Digits": text_col.get_digit(),
-                        "Mode Value": text_col.get_mode(dropna=self._params.DROP_NA),
+                        "Mode Value": text_col.get_mode(self._params.DROP_NA),
                     },
                     name="value",
                 )
             )
 
             # Display the Bar chart
-            st.plotly_chart(text_col.get_barchart(self._params.PLOT))
+            st.plotly_chart(
+                text_col.get_barchart(self._params.PLOT, self._params.DROP_NA)
+            )
 
             # Display most frequent values
             st.write("**Most Frequent Values**")
-            st.dataframe(text_col.get_frequent(self._params.TOP_FREQUENCY))
+            st.dataframe(
+                text_col.get_frequent(self._params.TOP_FREQUENCY, self._params.DROP_NA)
+            )
 
             # Add a horizontal rule
             st.markdown("---")

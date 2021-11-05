@@ -29,9 +29,9 @@ class NumericColumn:
         """Return name of selected column."""
         return self.col_name
 
-    def get_unique(self) -> int:
+    def get_unique(self, dropna: bool = True) -> int:
         """Return number of unique values for selected column."""
-        return self.serie.nunique()
+        return self.serie.nunique(dropna=dropna)
 
     def get_missing(self) -> int:
         """Return number of missing values for selected column."""
@@ -65,14 +65,14 @@ class NumericColumn:
         """Return the median value for selected column."""
         return self.serie.median()
 
-    def _get_occurrences(self) -> pd.Series:
+    def _get_occurrences(self, dropna: bool = True) -> pd.Series:
         """Return the occurrences per value for selected column."""
-        return self.serie.value_counts().rename("occurrence")
+        return self.serie.value_counts(dropna=dropna).rename("occurrence")
 
-    def _get_percentages(self) -> pd.Series:
+    def _get_percentages(self, dropna: bool = True) -> pd.Series:
         """Return the normalised occurrences per value for selected column."""
         return (
-            self.serie.value_counts(normalize=True)
+            self.serie.value_counts(normalize=True, dropna=dropna)
             .round(decimals=4)
             .rename("percentage")
         )
@@ -101,10 +101,16 @@ class NumericColumn:
         )
         return fig
 
-    def get_frequent(self, n_head: int = 20) -> pd.DataFrame:
+    def get_frequent(self, n_head: int = 20, dropna: bool = True) -> pd.DataFrame:
         """Return the Pandas dataframe containing the occurrences and percentage of the top n_head most frequent values."""
         return (
-            pd.concat([self._get_occurrences(), self._get_percentages()], axis=1)
+            pd.concat(
+                [
+                    self._get_occurrences(dropna=dropna),
+                    self._get_percentages(dropna=dropna),
+                ],
+                axis=1,
+            )
             .rename_axis("value")
             .sort_values(by="occurrence", ascending=False)
             .head(n_head)

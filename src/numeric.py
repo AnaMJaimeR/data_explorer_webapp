@@ -11,66 +11,66 @@ from src.settings import FormatHistogram
 @dataclass
 class NumericColumn:
     """
-    Class for storing and displaying information of a numeric column
+    Class for storing and displaying information of a numeric column.
 
     Attributes
     ----------
     col_name: str
-        Name of the numeric pandas column
+        Name of the numeric pandas column.
 
     serie: pd.Series
-        Series containing the data of the numeric pandas column
+        Series containing the data of the numeric pandas column.
     """
 
     col_name: str
     serie: pd.Series
 
     def get_name(self) -> str:
-        """Return name of selected column"""
+        """Return name of selected column."""
         return self.col_name
 
     def get_unique(self) -> int:
-        """Return number of unique values for selected column"""
+        """Return number of unique values for selected column."""
         return self.serie.nunique()
 
     def get_missing(self) -> int:
-        """Return number of missing values for selected column"""
+        """Return number of missing values for selected column."""
         return int(self.serie.isna().sum())
 
     def get_zeros(self) -> int:
-        """Return number of occurrence of 0 value for selected column"""
+        """Return number of occurrence of 0 value for selected column."""
         return int((self.serie == 0).sum())
 
     def get_negatives(self) -> int:
-        """Return number of negative values for selected column"""
+        """Return number of negative values for selected column."""
         return int((self.serie < 0).sum())
 
     def get_mean(self) -> float:
-        """Return the average value for selected column"""
+        """Return the average value for selected column."""
         return self.serie.mean()
 
     def get_std(self) -> float:
-        """Return the standard deviation value for selected column"""
+        """Return the standard deviation value for selected column."""
         return self.serie.std()
 
     def get_min(self) -> Union[int, float]:
-        """Return the minimum value for selected column"""
+        """Return the minimum value for selected column."""
         return self.serie.min()
 
     def get_max(self) -> Union[int, float]:
-        """Return the maximum value for selected column"""
+        """Return the maximum value for selected column."""
         return self.serie.max()
 
     def get_median(self) -> Union[int, float]:
-        """Return the median value for selected column"""
+        """Return the median value for selected column."""
         return self.serie.median()
 
     def _get_occurrences(self) -> pd.Series:
-        """Return the occurrences per value for selected column"""
+        """Return the occurrences per value for selected column."""
         return self.serie.value_counts().rename("occurrence")
 
     def _get_percentages(self) -> pd.Series:
-        """Return the normalised occurrences per value for selected column"""
+        """Return the normalised occurrences per value for selected column."""
         return (
             self.serie.value_counts(normalize=True)
             .round(decimals=4)
@@ -81,7 +81,7 @@ class NumericColumn:
         self,
         params: FormatHistogram,
     ) -> Figure:
-        """Return the generated histogram for selected column"""
+        """Return the generated histogram for selected column."""
         fig = px.histogram(
             pd.DataFrame(self.serie), x=self.col_name, nbins=params.MAX_BINS
         )
@@ -102,7 +102,7 @@ class NumericColumn:
         return fig
 
     def get_frequent(self, n_head: int = 20) -> pd.DataFrame:
-        """Return the Pandas dataframe containing the occurrences and percentage of the top n_head most frequent values"""
+        """Return the Pandas dataframe containing the occurrences and percentage of the top n_head most frequent values."""
         return (
             pd.concat([self._get_occurrences(), self._get_percentages()], axis=1)
             .rename_axis("value")

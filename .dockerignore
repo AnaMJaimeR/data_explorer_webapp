@@ -1,6 +1,7 @@
 # Exclude unnecessary files
 .git
 .gitignore
+demo
 Dockerfile
 README.md
 .dockerignore
